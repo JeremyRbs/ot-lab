@@ -1,23 +1,32 @@
 # ot-lab
 
-Banc d'essai personnel pour la sécurité des systèmes industriels (OT).
-Objectif : comprendre, attaquer et défendre un environnement de contrôle-commande réaliste,
-dans un cadre 100 % légal (matériel et logiciels m'appartenant).
+Personal test bench for industrial (OT) cybersecurity.
+Goal: understand, attack and defend a realistic control system — 100% on my own hardware and software, fully legal.
 
 ## Architecture
-- **Automate** : OpenPLC runtime (Raspberry Pi / Docker)
-- **HMI** : interface de supervision
-- **Protocole** : Modbus/TCP
-- **Outils attaque** : Wireshark, scapy, pymodbus
-- **Défense** : segmentation réseau, filtrage, supervision
+- **PLC**: OpenPLC runtime (Raspberry Pi / Docker)
+- **HMI**: supervision dashboard
+- **Protocol**: Modbus/TCP
+- **Attack tooling**: Wireshark, scapy, pymodbus
+- **Defense**: network segmentation, filtering, monitoring
 
-## Plan
-- [ ] Montage du banc (OpenPLC + HMI + Modbus/TCP)
-- [ ] Simulation d'un processus simple (régulation de température)
-- [ ] Capture et lecture du trafic Modbus
-- [ ] Rejeu et altération de commandes (attaque)
-- [ ] Mise en place des défenses (segmentation, filtrage, supervision)
-- [ ] Write-up #1 : découverte → attaque → défense
+## Roadmap
+- [ ] Bench setup (OpenPLC + HMI + Modbus/TCP)
+- [ ] Simulate a simple process (temperature control)
+- [ ] Capture and dissect Modbus traffic
+- [ ] Replay and alter commands (attack phase)
+- [ ] Implement defenses (segmentation, filtering, monitoring)
+- [ ] Write-up #1: recon → attack → defense
 
-## Journal
-- **J1** : création du repo, commande du matériel.
+## Lab journal
+- **Day 1**: repo created, hardware ordered.
+
+## Why this lab
+Industrial products are becoming connected, and their security can't be learned
+from slides only. This lab is my way of building hands-on experience with the
+protocols, devices and threat patterns of real OT environments — one experiment
+at a time, documented openly.
+
+## Disclaimer
+All experiments are conducted exclusively on hardware and software I own,
+in an isolated lab network. No third-party systems are ever targeted.
