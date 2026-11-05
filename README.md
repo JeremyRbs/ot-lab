@@ -21,6 +21,12 @@ Goal: understand, attack and defend a realistic control system — 100% on my ow
 ## Lab journal
 - **Day 1**: repo created, hardware ordered.
 
+## Modbus reader configuration
+Copy `scripts/config.example.json` to `scripts/config.json` and set `host` to
+the Raspberry Pi's address. The local `config.json` is ignored by Git, so the
+address is not committed with the source code. Set `port` if the Modbus server
+does not use the default port `502`.
+
 ## Why this lab
 Industrial products are becoming connected, and their security can't be learned
 from slides only. This lab is my way of building hands-on experience with the
