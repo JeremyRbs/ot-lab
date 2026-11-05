@@ -54,17 +54,26 @@ def main():
                 f"Could not connect to Modbus server at {host}:{port}."
             )
 
-        r_setpoint = client.read_holding_registers(1024, count=1, device_id=1)
-        r_level = client.read_input_registers(0, count=1, device_id=1)
-        r_sensor = client.read_discrete_inputs(0, count=1, device_id=1)
-        r_pump = client.read_coils(0, count=1, device_id=1)
+        # Initialize the process: setpoint := 50, tank empty
+        client.write_register(1024, 50, device_id=1)   # setpoint (%MW0)
+        client.write_register(1025, 0, device_id=1)     # level (%MW1) — tank empty
 
-        print("--- OPENPLC DATA VALUES ---")
-        print("setpoint (%MW0)      :", read_value(r_setpoint, "registers"))
-        print("level (%IW0)         :", read_value(r_level, "registers"))
-        print("sensor_level (%IX0.0):", read_value(r_sensor, "bits"))
-        print("pump_output (%QX0.0) :", read_value(r_pump, "bits"))
+        print("Filling... watch the level climb (pump adds 1 unit per PLC scan)")
 
+        import time
+        for _ in range(12):
+            r_setpoint = client.read_holding_registers(1024, count=1, device_id=1)
+            r_level    = client.read_holding_registers(1025, count=1, device_id=1)
+            r_pump     = client.read_coils(0, count=1, device_id=1)
+            print(
+                "setpoint:", read_value(r_setpoint, "registers"),
+                "| level:", read_value(r_level, "registers"),
+                "| pump:", read_value(r_pump, "bits"),
+            )
+            time.sleep(0.5)
+
+    except KeyboardInterrupt:
+        print("\nExiting...")
     finally:
         client.close()
 
