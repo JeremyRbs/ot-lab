@@ -1,5 +1,7 @@
 # ot-lab
 
+[Start here: Write-up #1](writeups/writeup-01.md)
+
 Personal test bench for industrial (OT) cybersecurity.
 Goal: understand, attack and defend a realistic control system — 100% on my own hardware and software, fully legal.
 
