@@ -1,0 +1,14 @@
+nmap -sV -p 502,8443 192.168.1.120
+Starting Nmap 7.993 ( https://nmap.org ) at 2026-11-06 15:17 +0100
+Stats: 0:00:55 elapsed; 0 hosts completed (1 up), 1 undergoing Service Scan
+Service scan Timing: About 50.00% done; ETC: 15:19 (0:00:54 remaining)
+Nmap scan report for nexus.home (192.168.1.120)
+Host is up (0.13s latency).
+
+PORT     STATE SERVICE  VERSION
+502/tcp  open  modbus   Modbus TCP (gateway)
+8443/tcp open  ssl/http Werkzeug httpd 3.1.9 (Python 3.13.5)
+MAC Address: 2C:CF:67:15:73:00 (Raspberry Pi (Trading))
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 91.89 seconds
