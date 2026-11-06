@@ -12,6 +12,11 @@ Scope: personal, isolated lab, simulated process. No third-party system, no phys
 
 ![Original diagram of the isolated OT lab architecture, including the client PC, Raspberry Pi, firewall, OpenPLC and simulated tank.](images/ot-lab-architecture.svg)
 
+The client reaches the Pi over the isolated LAN: Modbus/TCP uses port 502 and
+the OpenPLC management interface uses HTTPS on port 8443. The host firewall
+filters those services; connection polling and kernel logs run on the Pi. The
+tank is a software simulation, not a physical process.
+
 | Component | Detail |
 |---|---|
 | PLC | OpenPLC Runtime v4, native install, Raspberry Pi (ARM64, Debian 13) at `192.168.1.120` |
