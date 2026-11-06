@@ -65,7 +65,9 @@ The `modbus_slave` plugin addressing plan in segmented mode:
 | Holding Registers `%MD` | 03 / 06 | 2048–4095 | (double words) |
 | Holding Registers `%ML` | 03 / 06 | 4096–8191 | (long words) |
 
-Word order: `high_word_first`. Slave ID queried: `slave=0` (server-wide global ID, no restriction).
+Word order: `high_word_first`. The current scripts and packet captures use
+Modbus Unit ID 1. Some earlier ad-hoc examples used Unit ID 0; that did not
+match the Unit ID observed in the captures.
 
 ## 4. Reading/Writing from Python (pymodbus)
 
@@ -74,17 +76,17 @@ Script: `scripts/modbus_read.py` (host/port config in `scripts/config.json`).
 Reads:
 
 ```python
-r_setpoint = client.read_holding_registers(1024, count=1, slave=0)  # setpoint (%MW0)
-r_level    = client.read_holding_registers(1025, count=1, slave=0)  # level (%MW1)
-r_pump     = client.read_coils(0, count=1, slave=0)                 # pump_output (%QX0.0)
+r_setpoint = client.read_holding_registers(1024, count=1, device_id=1)  # setpoint (%MW0)
+r_level    = client.read_holding_registers(1025, count=1, device_id=1)  # level (%MW1)
+r_pump     = client.read_coils(0, count=1, device_id=1)                 # pump_output (%QX0.0)
 ```
 
 Writes (simulating the level sensor from the PC):
 
 ```python
-client.write_register(1024, 50, slave=0)  # setpoint := 50
-client.write_register(1025, 20, slave=0)  # level := 20 (low tank)
-client.write_register(1025, 65, slave=0)  # level := 65 (high tank, setpoint + 15)
+client.write_register(1024, 50, device_id=1)  # setpoint := 50
+client.write_register(1025, 20, device_id=1)  # level := 20 (low tank)
+client.write_register(1025, 65, device_id=1)  # level := 65 (high tank, setpoint + 15)
 ```
 
 ## 5. Functional Test Results
@@ -96,13 +98,16 @@ client.write_register(1025, 65, slave=0)  # level := 65 (high tank, setpoint + 1
 
 The complete loop works: **Modbus write → PLC logic (20 ms cycle) → output readable on the coil → read back from the PC**.
 
-Security observation (setting up Session 4): a single `write_register` from any machine on the LAN overwrites both the setpoint and the measurement — no authentication, no access control whatsoever.
+Security observation (setting up Session 4): a client that can reach TCP/502
+can attempt to write the setpoint or measurement. Classic Modbus/TCP has no
+built-in authentication; network filtering determines which clients can reach
+the server.
 
 ## Pitfalls Encountered and Resolutions
 
 - `PROGRAM` flagged as an error in the ST file → declarations belong in the editor's variable table, not in the code.
 - `PLC State: EMPTY` before the first deployment → normal; the `libplc` file is generated at project compile time.
-- Values read as 0 despite initialization to 50 → check the slave ID (`slave=0`) and the address (`%MW` is offset by +1024 in the segmented map).
+- Values read as 0 despite initialization to 50 → check the Unit ID (`device_id=1`) and the address (`%MW` is offset by +1024 in the segmented map).
 - `%IW0` could not be driven from Python → Input Registers are read-only; move the simulated variable to `%MW`.
 
 ## Session Deliverables
