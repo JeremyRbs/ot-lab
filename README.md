@@ -7,16 +7,16 @@ Goal: understand, attack and defend a realistic control system — 100% on my ow
 - **PLC**: OpenPLC v4 runtime installed natively on a Raspberry Pi
 - **HMI**: Python command-line supervision dashboard
 - **Protocol**: Modbus/TCP
-- **Attack tooling**: Wireshark, scapy, pymodbus
-- **Defense**: network segmentation, filtering, monitoring
+- **Lab tooling**: Wireshark, Nmap, pymodbus
+- **Defense**: host firewall filtering and connection monitoring
 
 ## Roadmap
-- [ ] Bench setup (OpenPLC + HMI + Modbus/TCP)
-- [ ] Simulate a simple process (temperature control)
-- [ ] Capture and dissect Modbus traffic
-- [ ] Replay and alter commands (attack phase)
-- [ ] Implement defenses (segmentation, filtering, monitoring)
-- [ ] Write-up #1: recon → attack → defense
+- [x] Bench setup (OpenPLC + Python HMI + Modbus/TCP)
+- [x] Simulate a tank-level process
+- [x] Capture and dissect Modbus traffic
+- [x] Test Modbus reads and setpoint writes against the simulated process
+- [x] Apply and test firewall filtering and connection monitoring
+- [ ] Consolidate the lab findings into write-up #1 (recon → attack → defense)
 
 ## Lab journal
 - **Day 1**: repo created, hardware ordered.
@@ -26,6 +26,13 @@ Copy `scripts/config.example.json` to `scripts/config.json` and set `host` to
 the Raspberry Pi's address. The local `config.json` is ignored by Git, so the
 address is not committed with the source code. Set `port` if the Modbus server
 does not use the default port `502`. Only connect to your own isolated lab.
+
+## Modbus connection monitor
+Before running `scripts/detect_modbus.py` on the Raspberry Pi, edit its
+`ALLOWLIST` with the IP address(es) of authorized Modbus clients. The monitor
+reports newly established connections to the Pi's local TCP port `502` from
+addresses outside that list. It does not detect connection attempts dropped
+before TCP establishment; use firewall/kernel logs for those.
 
 ## Why this lab
 Industrial products are becoming connected, and their security can't be learned
