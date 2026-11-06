@@ -18,7 +18,8 @@ Goal: understand, attack and defend a realistic control system — 100% on my ow
 - [x] Capture and dissect Modbus traffic
 - [x] Test Modbus reads and setpoint writes against the simulated process
 - [x] Apply and test firewall filtering and connection monitoring
-- [ ] Consolidate the lab findings into write-up #1 (recon → attack → defense)
+- [x] Consolidate the lab findings into [write-up #1](writeups/writeup-01.md)
+      (recon → attack → defense)
 
 ## Lab journal
 - **Day 1**: repo created, hardware ordered.
