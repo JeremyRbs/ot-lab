@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title description">
+  <title id="title">Simulated tank control logic and setpoint attack effect</title>
+  <desc id="description">The OpenPLC tank simulation adds one level unit per scan while the pump command is on, starts below the setpoint, stops at setpoint plus ten, and caps level at one hundred. A setpoint of two hundred makes the stop threshold two hundred ten unreachable, so the simulated pump stays on at the cap.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#edf3f8"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#62c2ed"/>
+      <stop offset="1" stop-color="#168aad"/>
+    </linearGradient>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#2878a8"/>
+    </marker>
+    <marker id="arrowDark" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#526579"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #172b3a; }
+      .title { font-size: 27px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #526579; }
+      .heading { font-size: 18px; font-weight: 700; }
+      .body { font-size: 15px; }
+      .small { font-size: 13px; fill: #526579; }
+      .panel { fill: #fff; stroke: #b6c6d6; stroke-width: 2; }
+      .flow { fill: none; stroke: #2878a8; stroke-width: 3; marker-end: url(#arrowBlue); }
+      .logic { fill: #eef6fb; stroke: #8db9d0; stroke-width: 2; }
+      .warning { fill: #fff4e5; stroke: #e6ac50; stroke-width: 2; }
+      .danger { fill: #fff0ef; stroke: #d97970; stroke-width: 2; }
+    </style>
+  </defs>
+  <rect width="1200" height="700" rx="24" fill="url(#background)"/>
+  <text x="52" y="58" class="title">Tank simulation: control logic and setpoint effect</text>
+  <text x="52" y="86" class="subtitle">Software process model in OpenPLC · one level unit is added per PLC scan while the pump command is ON</text>
+
+  <rect x="50" y="122" width="1100" height="286" rx="20" class="panel"/>
+  <text x="78" y="158" class="heading">Normal control behavior (setpoint = 50)</text>
+
+  <rect x="88" y="193" width="185" height="72" rx="12" fill="#e9f4fb" stroke="#a8c9dd" stroke-width="1.5"/>
+  <text x="180" y="221" text-anchor="middle" class="body" font-weight="700">Modbus client</text>
+  <text x="180" y="245" text-anchor="middle" class="small">write HR 1024</text>
+  <path d="M273 229h65" class="flow"/>
+
+  <rect x="346" y="180" width="330" height="98" rx="14" class="logic"/>
+  <text x="511" y="209" text-anchor="middle" class="heading">OpenPLC ST control</text>
+  <text x="511" y="235" text-anchor="middle" class="body">if level &lt; setpoint → pump ON</text>
+  <text x="511" y="258" text-anchor="middle" class="body">if level ≥ setpoint + 10 → pump OFF</text>
+  <path d="M676 229h64" class="flow"/>
+
+  <rect x="748" y="193" width="178" height="72" rx="12" fill="#edf8f3" stroke="#a4cfb9" stroke-width="1.5"/>
+  <text x="837" y="221" text-anchor="middle" class="body" font-weight="700">Pump command</text>
+  <text x="837" y="245" text-anchor="middle" class="small">coil 0 / %QX0.0</text>
+  <path d="M926 229h49" class="flow"/>
+
+  <path d="M1010 184h94v133q-47 21-94 0Z" fill="#f9fcff" stroke="#61798c" stroke-width="3"/>
+  <path d="M1014 241h86v72q-43 18-86 0Z" fill="url(#water)" opacity=".92"/>
+  <line x1="1010" y1="241" x2="1104" y2="241" stroke="#e69f00" stroke-width="3" stroke-dasharray="6 5"/>
+  <text x="1057" y="174" text-anchor="middle" class="small">tank level</text>
+  <text x="1112" y="246" class="small">60 stop</text>
+  <text x="1112" y="319" class="small">0</text>
+
+  <rect x="89" y="310" width="1000" height="62" rx="12" fill="#f3f7fa"/>
+  <text x="112" y="337" class="body" font-weight="700">Stable result:</text>
+  <text x="222" y="337" class="body">pump starts below 50, keeps filling through the hysteresis band, then stops at level 60.</text>
+  <text x="112" y="359" class="small">The model has no drain; the level does not fall when the pump is OFF.</text>
+
+  <rect x="50" y="434" width="1100" height="214" rx="20" class="panel"/>
+  <text x="78" y="470" class="heading">Captured setpoint write (Session 4)</text>
+  <rect x="82" y="492" width="270" height="92" rx="13" class="warning"/>
+  <text x="217" y="522" text-anchor="middle" class="body" font-weight="700">FC06 · HR 1024</text>
+  <text x="217" y="550" text-anchor="middle" class="heading">setpoint = 200</text>
+  <text x="217" y="573" text-anchor="middle" class="small">captured request ends in 00 C8</text>
+  <path d="M352 538h68" class="flow"/>
+  <rect x="428" y="492" width="282" height="92" rx="13" class="logic"/>
+  <text x="569" y="522" text-anchor="middle" class="body" font-weight="700">Stop threshold = 210</text>
+  <text x="569" y="550" text-anchor="middle" class="body">200 + hysteresis (10)</text>
+  <text x="569" y="573" text-anchor="middle" class="small">threshold is unreachable</text>
+  <path d="M710 538h68" class="flow"/>
+  <rect x="786" y="492" width="318" height="92" rx="13" class="danger"/>
+  <text x="945" y="522" text-anchor="middle" class="body" font-weight="700">Level capped at 100</text>
+  <text x="945" y="550" text-anchor="middle" class="body">pump remains commanded ON</text>
+  <text x="945" y="573" text-anchor="middle" class="small">simulated impact, not a physical overflow</text>
+  <text x="78" y="619" class="small">The PLC executes its programmed logic; the risk is unauthenticated write access to the setpoint, not PLC code modification.</text>
+</svg>

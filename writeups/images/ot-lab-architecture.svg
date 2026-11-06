@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title description">
+  <title id="title">OpenPLC OT lab architecture</title>
+  <desc id="description">An isolated PC connects over Ethernet to a Raspberry Pi running an OpenPLC Modbus server and a simulated tank process. The Pi host firewall filters Modbus and management traffic, while local tools monitor established connections and firewall logs.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#eaf1f8"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#56b4e9"/>
+      <stop offset="1" stop-color="#168aad"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#2878a8"/>
+    </marker>
+    <marker id="arrowDark" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#425466"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #172b3a; }
+      .title { font-size: 27px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #526579; }
+      .heading { font-size: 18px; font-weight: 700; }
+      .body { font-size: 15px; }
+      .small { font-size: 13px; fill: #526579; }
+      .panel { fill: #fff; stroke: #b6c6d6; stroke-width: 2; }
+      .chip { fill: #edf5fa; stroke: #b6d2e3; stroke-width: 1.5; }
+      .flow { fill: none; stroke: #2878a8; stroke-width: 4; marker-end: url(#arrow); }
+      .local { fill: none; stroke: #425466; stroke-width: 2.5; stroke-dasharray: 8 6; marker-end: url(#arrowDark); }
+    </style>
+  </defs>
+
+  <rect width="1200" height="620" rx="24" fill="url(#background)"/>
+  <text x="54" y="58" class="title">OT lab architecture</text>
+  <text x="54" y="86" class="subtitle">Personal isolated bench · simulated process only · no physical actuator</text>
+
+  <rect x="34" y="112" width="1132" height="442" rx="22" fill="#f3f8fc" stroke="#8aa7bb" stroke-width="2" stroke-dasharray="10 7"/>
+  <rect x="52" y="99" width="177" height="28" rx="14" fill="#dbeaf3"/>
+  <text x="67" y="119" class="small" font-weight="700">ISOLATED LAB LAN</text>
+
+  <rect x="72" y="209" width="260" height="230" rx="18" class="panel"/>
+  <rect x="92" y="230" width="74" height="48" rx="6" fill="#243b53"/>
+  <rect x="99" y="236" width="60" height="34" rx="3" fill="#8bd3e6"/>
+  <path d="M116 286h28m-15-8v8m-14 3h42" stroke="#243b53" stroke-width="4" stroke-linecap="round"/>
+  <text x="183" y="249" class="heading">Client PC</text>
+  <text x="183" y="273" class="body">192.168.1.50</text>
+  <line x1="96" y1="307" x2="308" y2="307" stroke="#d7e2eb" stroke-width="2"/>
+  <text x="96" y="336" class="body" font-weight="700">Authorized workstation</text>
+  <text x="96" y="361" class="small">Read-only Python HMI</text>
+  <text x="96" y="384" class="small">pymodbus client scripts</text>
+  <text x="96" y="407" class="small">Wireshark · Nmap</text>
+
+  <rect x="394" y="270" width="152" height="104" rx="18" fill="#fff" stroke="#9bb5c7" stroke-width="2"/>
+  <circle cx="430" cy="320" r="13" fill="#36a2c9"/>
+  <circle cx="470" cy="320" r="13" fill="#36a2c9"/>
+  <circle cx="510" cy="320" r="13" fill="#36a2c9"/>
+  <path d="M422 346h96" stroke="#9bb5c7" stroke-width="3"/>
+  <text x="470" y="299" text-anchor="middle" class="small" font-weight="700">Ethernet LAN</text>
+  <text x="470" y="364" text-anchor="middle" class="small">wired / Wi-Fi</text>
+
+  <path d="M332 321H390" class="flow"/>
+  <path d="M546 321H606" class="flow"/>
+  <text x="361" y="297" text-anchor="middle" class="small">Modbus/TCP</text>
+  <text x="361" y="386" text-anchor="middle" class="small">HTTPS management</text>
+  <text x="576" y="306" text-anchor="middle" class="small">TCP/502</text>
+  <text x="576" y="330" text-anchor="middle" class="small">TCP/8443</text>
+
+  <rect x="608" y="157" width="512" height="345" rx="20" class="panel"/>
+  <text x="637" y="193" class="heading">Raspberry Pi · 192.168.1.120</text>
+  <rect x="637" y="214" width="454" height="54" rx="11" fill="#fff3db" stroke="#e4b85d" stroke-width="1.5"/>
+  <path d="M657 230h20l10 10-10 10h-20l-10-10Z" fill="#e69f00"/>
+  <text x="698" y="238" class="body" font-weight="700">Host firewall (iptables)</text>
+  <text x="698" y="257" class="small">Allowlisted source IP on TCP/502 and TCP/8443</text>
+  <rect x="637" y="286" width="214" height="92" rx="12" class="chip"/>
+  <text x="655" y="314" class="heading">OpenPLC Runtime</text>
+  <text x="655" y="340" class="body">Modbus/TCP server</text>
+  <text x="655" y="362" class="small">ST logic · Unit ID 1</text>
+  <rect x="872" y="286" width="219" height="92" rx="12" class="chip"/>
+  <text x="890" y="314" class="heading">Monitoring</text>
+  <text x="890" y="340" class="body">ss connection poller</text>
+  <text x="890" y="362" class="small">kernel firewall logs</text>
+  <path d="M850 332h18" class="local"/>
+  <rect x="637" y="397" width="454" height="78" rx="12" fill="#edf8f3" stroke="#a4cfb9" stroke-width="1.5"/>
+  <text x="655" y="426" class="heading">Simulated tank process</text>
+  <text x="655" y="451" class="body">setpoint (%MW0) · level (%MW1) · pump command (%QX0.0)</text>
+  <path d="M744 378v18" class="local"/>
+  <path d="M980 378v18" class="local"/>
+  <text x="637" y="528" class="small">Firewall filters network access; monitoring observes sessions and dropped packets.</text>
+
+  <rect x="72" y="466" width="260" height="54" rx="12" fill="#e8f4fb" stroke="#b6d2e3" stroke-width="1.5"/>
+  <text x="91" y="490" class="body" font-weight="700">Modbus mapping</text>
+  <text x="91" y="510" class="small">HR 1024 / HR 1025 · coil 0</text>
+  <path d="M202 439v24" class="local"/>
+
+  <text x="600" y="590" text-anchor="middle" class="small">Diagram reflects this lab's observed topology and configured services.</text>
+</svg>

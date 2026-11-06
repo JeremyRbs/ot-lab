@@ -10,6 +10,8 @@ Scope: personal, isolated lab, simulated process. No third-party system, no phys
 
 ## 1. The Bench
 
+![Original diagram of the isolated OT lab architecture, including the client PC, Raspberry Pi, firewall, OpenPLC and simulated tank.](images/ot-lab-architecture.svg)
+
 | Component | Detail |
 |---|---|
 | PLC | OpenPLC Runtime v4, native install, Raspberry Pi (ARM64, Debian 13) at `192.168.1.120` |
@@ -67,6 +69,8 @@ The server echoed the write ~5 ms later. Captured process timeline:
 | rest of capture | 200 | 100 (capped) | **ON, indefinitely** |
 
 Why it fails forever: the stop condition is `level ≥ setpoint + 10` = **210**, but the program clamps `level` at 100. The threshold is unreachable, so `pump_output` stays TRUE. The PLC was never "hacked": its logic kept running correctly and obeyed an absurd but formally valid setpoint. **The vulnerability is that anyone on the network can be a valid Modbus client.**
+
+![Original control-logic diagram showing normal hysteresis at setpoint 50 and the captured setpoint-200 outcome, with a 100-unit level cap.](images/tank-process.svg)
 
 What this does *not* prove (and why that matters): the PLC program was not modified, no physical equipment was involved, and the write only succeeded because this client was not filtered. Precision here is the difference between a lab report and a claim.
 
