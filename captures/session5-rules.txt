@@ -1,0 +1,20 @@
+Session 5 firewall rules — baseline reported before the temporary block test
+
+Command:
+sudo iptables -L INPUT -n -v --line-numbers
+
+Output:
+Chain INPUT (policy ACCEPT 10367 packets, 866K bytes)
+num   pkts bytes target     prot opt in     out     source               destination
+1    15195  729K ACCEPT     tcp  --  *      *       192.168.1.50         0.0.0.0/0            tcp dpt:502
+2        0     0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:502 limit: avg 5/min burst 5 LOG flags 0 level 4 prefix "MODBUS-DROP: "
+3        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:502
+4        0     0 ACCEPT     tcp  --  *      *       192.168.1.50         0.0.0.0/0            tcp dpt:8443
+5        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8443
+
+Evidence note:
+This is a transcription of the baseline rule listing supplied during Session 5,
+before temporary test rules were inserted. The temporary rules that logged and
+dropped traffic from 192.168.1.50 to TCP/502 were removed after the test, as
+reported by the operator. This file is not a fresh query of the Pi. Persistence
+across reboot was not verified.
