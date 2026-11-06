@@ -61,9 +61,14 @@ The supplied PCAPNG does not show the full register/coil enumeration from
 `attack_recon.py`: its reads are predominantly holding-register reads starting
 at 1024 with a quantity of two, plus reads of coil 0. Because multiple scripts
 use the same client machine, those captured reads cannot be attributed
-specifically to the reconnaissance script. The Nmap and enumeration results
-above are transcribed from the terminal output supplied for this write-up; that
-output has not been saved as a separate repository artifact.
+specifically to the reconnaissance script. The raw Nmap output is saved in
+[`../captures/session4-nmap.txt`](../captures/session4-nmap.txt). The
+reconnaissance output above was supplied in the original session conversation.
+To preserve raw output, the read-only script was run again on 2026-11-06 and
+saved as [`../captures/session4-recon.txt`](../captures/session4-recon.txt).
+This is a fresh follow-up snapshot, not the original Session 4 terminal output:
+it reports setpoint 200, level 100, and coil 0 ON. Do not conflate it with the
+earlier Session 4 state above.
 
 ## 2. Captured Modbus/TCP Traffic
 
@@ -152,15 +157,17 @@ while the simulated value remains capped at 100.
   points only to the authorized, isolated lab before running them.
 - The PCAPNG supports the write and process-state timeline above. It does not
   include the Nmap output, the complete register-enumeration run, or runtime
-  logs. The Nmap and enumeration results in this document came from terminal
-  output supplied separately.
+  logs. The raw Nmap output is saved separately; the register-enumeration
+  results came from terminal output supplied separately.
 
 ## Verification
 
-- The session 4 PCAPNG was parsed offline; no Modbus request was sent during
-  this repository review.
+- The session 4 PCAPNG was parsed offline.
+- The raw follow-up reconnaissance output was captured from the configured
+  lab PLC on 2026-11-06; it performed reads only.
 - All Python scripts pass syntax compilation in the current environment.
-- No live PLC connection or write test was performed during this review.
+- The later Session 5 setpoint restoration write and its verification are
+  documented in [`session-05.md`](./session-05.md).
 
 ## Session Deliverables
 
@@ -172,5 +179,7 @@ while the simulated value remains capped at 100.
   process reads
 - [x] FC06 request decoded byte by byte
 - [x] Simulated impact documented without claiming a physical overflow
-- [ ] Save the supplied reconnaissance and Nmap output as a text artifact if
-      persistent, independently reviewable evidence is desired
+- [x] Save the Nmap output in `captures/session4-nmap.txt`
+- [x] Save a fresh raw `attack_recon.py` output as
+      `captures/session4-recon.txt` (follow-up snapshot, not original-session
+      output)
