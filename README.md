@@ -4,8 +4,8 @@ Personal test bench for industrial (OT) cybersecurity.
 Goal: understand, attack and defend a realistic control system — 100% on my own hardware and software, fully legal.
 
 ## Architecture
-- **PLC**: OpenPLC runtime (Raspberry Pi / Docker)
-- **HMI**: supervision dashboard
+- **PLC**: OpenPLC v4 runtime installed natively on a Raspberry Pi
+- **HMI**: Python command-line supervision dashboard
 - **Protocol**: Modbus/TCP
 - **Attack tooling**: Wireshark, scapy, pymodbus
 - **Defense**: network segmentation, filtering, monitoring
@@ -25,7 +25,7 @@ Goal: understand, attack and defend a realistic control system — 100% on my ow
 Copy `scripts/config.example.json` to `scripts/config.json` and set `host` to
 the Raspberry Pi's address. The local `config.json` is ignored by Git, so the
 address is not committed with the source code. Set `port` if the Modbus server
-does not use the default port `502`.
+does not use the default port `502`. Only connect to your own isolated lab.
 
 ## Why this lab
 Industrial products are becoming connected, and their security can't be learned

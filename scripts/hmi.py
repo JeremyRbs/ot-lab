@@ -14,7 +14,7 @@ def main():
     host = config.get("host")
     port = config.get("port", 502)
 
-    if not isinstance(host, str) or not host.strip():
+    if not isinstance(host, str) or not host.strip() or host.strip() == "CHANGE_ME":
         raise ValueError("Set a valid Modbus server address in config.json.")
     if not isinstance(port, int) or isinstance(port, bool) or not 1 <= port <= 65535:
         raise ValueError("The Modbus server port must be between 1 and 65535.")
