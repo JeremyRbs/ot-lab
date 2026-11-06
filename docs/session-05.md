@@ -20,11 +20,12 @@ The reported `iptables` INPUT chain has the following order:
 | 5 | TCP/8443 | Drop | Block other management traffic |
 
 The INPUT chain's default policy is ACCEPT; these rules specifically filter
-TCP/502 and TCP/8443. SSH/TCP/22 is not changed by this ruleset. The baseline
-listing and its counters are saved in
-[`../captures/session5-rules.txt`](../captures/session5-rules.txt). That file
-is a transcription of the operator-supplied listing, not a fresh Pi query.
-Saving the rules for persistence across reboot was not verified.
+TCP/502 and TCP/8443. SSH/TCP/22 is not changed by this ruleset. The original
+baseline listing and its counters are saved in
+[`../captures/session5-rules.txt`](../captures/session5-rules.txt). The
+operator later supplied a post-reboot `iptables -L -n` listing with the same
+five INPUT rules in the same order, confirming IPv4 rule persistence on this
+Pi.
 
 ## 2. Established-Connection Monitor
 
@@ -146,21 +147,17 @@ those paths.
 ## Limitations and Follow-up
 
 - The firewall rule listing is operator-supplied and saved as a transcription;
-  it was not re-queried from the Pi during this repository review.
-- Persistence across reboot (`iptables-persistent` / `netfilter-persistent`)
-  has not been evidenced.
-- To complete that check on the Pi, install and save the current rules, reboot,
-  then append the actual post-reboot listing to `captures/session5-rules.txt`:
-
-  ```bash
-  sudo apt install -y iptables-persistent
-  sudo netfilter-persistent save
-  sudo reboot
-  sudo iptables -L INPUT -n -v --line-numbers
-  ```
-
-  These commands have not been run from this workspace; the persistence
-  checkbox remains open until the post-reboot output is captured.
+  it was not queried directly by this repository review. The operator supplied
+  the post-reboot output, which is preserved in
+  [`../captures/session5-rules.txt`](../captures/session5-rules.txt).
+- `iptables-persistent` was already installed; the operator reported saving
+  with `netfilter-persistent`, rebooting, and seeing the same IPv4 INPUT rules
+  afterward. This confirms persistence for the displayed rules, not behavior
+  from an untrusted client or IPv6 filtering.
+- After reboot, `Test-NetConnection 192.168.1.120 -Port 502` from the PC at
+  `192.168.1.50` returned `TcpTestSucceeded: True`. This confirms permitted
+  TCP/502 reachability from the authorized PC; it does not test the deny path
+  from another client or TCP/8443.
 - The follow-up read-only check first confirmed the Session 4 test values
   (setpoint 200, level 100, pump ON). Afterward, the requested setpoint write
   was made; verification returned setpoint 50, level 100, pump OFF.
@@ -187,6 +184,8 @@ those paths.
   from the Pi, yielding remote peer `192.168.1.50`.
 - The operator supplied the firewall log lines and reported removal of the
   temporary test rules.
+- The operator supplied the post-reboot IPv4 firewall listing and the
+  successful TCP/502 connectivity test from the authorized PC.
 - A fresh read-only Modbus check on 2026-11-06 confirmed setpoint 200, level
   100, and pump ON. The explicitly requested setpoint write then returned an
   acknowledged response; after one second the readback was setpoint 50, level
@@ -201,6 +200,7 @@ those paths.
 - [x] Temporary deny test produced kernel log entries and captured SYNs
 - [x] `captures/session5-defense.pcapng` reviewed and findings documented
 - [x] Before/after comparison documented with single-client limitation
-- [ ] Confirm rule persistence after reboot
+- [x] Confirm IPv4 INPUT rule persistence after reboot from the supplied
+      post-reboot listing
 - [x] Restore setpoint to 50 and verify the stable simulated resting state:
       level 100, pump OFF; no level-register write

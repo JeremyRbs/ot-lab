@@ -16,5 +16,67 @@ Evidence note:
 This is a transcription of the baseline rule listing supplied during Session 5,
 before temporary test rules were inserted. The temporary rules that logged and
 dropped traffic from 192.168.1.50 to TCP/502 were removed after the test, as
-reported by the operator. This file is not a fresh query of the Pi. Persistence
-across reboot was not verified.
+reported by the operator. This first listing is not a fresh query of the Pi.
+
+Post-reboot persistence evidence (operator-supplied, 2026-11-06)
+
+Commands and reported results:
+  sudo apt install -y iptables-persistent
+    iptables-persistent was already the newest version (1.0.23).
+  sudo netfilter-persistent save
+    The IPv4 and IPv6 iptables plugins both ran their save action.
+  sudo reboot
+    The Raspberry Pi rebooted.
+  sudo iptables -L -n
+    The post-reboot listing below shows the expected INPUT rules in the
+    expected order. This demonstrates that the IPv4 INPUT rules survived
+    reboot on this Pi.
+
+Post-reboot listing:
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+ACCEPT     tcp  --  192.168.1.50         0.0.0.0/0            tcp dpt:502
+LOG        tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:502 limit: avg 5/min burst 5 LOG flags 0 level 4 prefix "MODBUS-DROP: "
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:502
+ACCEPT     tcp  --  192.168.1.50         0.0.0.0/0            tcp dpt:8443
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:8443
+
+Chain FORWARD (policy DROP)
+target     prot opt source               destination
+DOCKER-USER  all  --  0.0.0.0/0            0.0.0.0/0
+DOCKER-ISOLATION-STAGE-1  all  --  0.0.0.0/0            0.0.0.0/0
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+DOCKER     all  --  0.0.0.0/0            0.0.0.0/0
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain DOCKER (1 references)
+target     prot opt source               destination
+
+Chain DOCKER-ISOLATION-STAGE-1 (1 references)
+target     prot opt source               destination
+DOCKER-ISOLATION-STAGE-2  all  --  0.0.0.0/0            0.0.0.0/0
+DROP       all  --  !172.19.0.0/16        0.0.0.0/0
+DROP       all  --  0.0.0.0/0           !172.19.0.0/16
+RETURN     all  --  0.0.0.0/0            0.0.0.0/0
+
+Chain DOCKER-ISOLATION-STAGE-2 (1 references)
+target     prot opt source               destination
+DROP       all  --  0.0.0.0/0            0.0.0.0/0
+RETURN     all  --  0.0.0.0/0            0.0.0.0/0
+
+Chain DOCKER-USER (1 references)
+target     prot opt source               destination
+RETURN     all  --  0.0.0.0/0            0.0.0.0/0
+
+Connectivity check after reboot from the authorized PC (operator-supplied):
+  Test-NetConnection 192.168.1.120 -Port 502
+  TcpTestSucceeded : True
+  SourceAddress    : 192.168.1.50
+
+The TCP test confirms reachability from the allowlisted PC. It does not test
+denial from a different client or connectivity to TCP/8443.
