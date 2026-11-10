@@ -10,37 +10,7 @@ Note: the Ignition SCADA (Session 6) ran on a trial license and is no longer act
 
 ## 1. The Bench on the Purdue Model
 
-```mermaid
-flowchart TB
-  subgraph L5["Level 5 — Enterprise Network"]
-    INTERNET["Internet / updates"]
-  end
-
-  subgraph L4["Level 4 — Site Business (not present on this bench)"]
-    IT["IT systems — none deployed"]
-  end
-
-  subgraph L3["Level 3 — Site Operations"]
-    PC["Operator / engineering workstation<br/>192.168.1.50<br/>pymodbus clients · Wireshark · Nmap · OpenPLC Editor<br/>(former slot: Ignition SCADA)"]
-  end
-
-  subgraph L2["Level 2 — Supervision (embedded in L3 host here)"]
-    HMI["CLI HMI — scripts/hmi.py<br/>read-only FC01/FC03"]
-  end
-
-  subgraph L1["Level 1 — Basic Control"]
-    PLC["OpenPLC Runtime v4 on Raspberry Pi<br/>192.168.1.120 · ST tank program · 20 ms scan<br/>Modbus/TCP server :502 · mgmt API :8443"]
-  end
-
-  subgraph L0["Level 0 — Process (simulated)"]
-    TANK["Tank + pump<br/>%MW1 level · %QX0.0 pump · %IX0.0 sensor"]
-  end
-
-  PC -->|"Conduit C1 — Modbus/TCP :502 (FC01/03/06)<br/>+ HTTPS :8443 (engineering)"| PLC
-  HMI -.->|"runs on PC"| PC
-  PLC -->|"process image"| TANK
-  INTERNET -.->|"no path — bench isolated from IT"| L4
-```
+![Purdue model diagram of the bench](../captures/session8-purdue.png)
 
 Reading of the diagram:
 
