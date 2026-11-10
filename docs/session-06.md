@@ -85,7 +85,7 @@ Two conclusions, both documented with evidence:
 - [x] Screenshot: HMI in normal operation
 - [x] Screenshot: HMI during the attack (setpoint 200, level 100, pump ON, alarm)
 - [x] Unit ID mapping and zero-based indexing pitfalls documented
-- [ ] Commit: `feat(session-06): Ignition SCADA with Modbus tags and Perspective HMI`
+- [x] Commit: `feat(session-06): Ignition SCADA with Modbus tags and Perspective HMI`
 
 ## Next Step
 
