@@ -24,7 +24,7 @@ Goal: understand, attack and defend a realistic control system, 100% on my own h
 - [x] Harden the PLC itself: setpoint clamped to a valid range on every scan
 - [x] Map the bench onto the Purdue model and IEC 62443 zones/conduits, with an honest SL self-assessment
 - [X] Consolidate the lab findings into write-up #2
-- [] Authentication/authorization at the protocol layer (mTLS gateway / RBAC)
+- [ ] Authentication/authorization at the protocol layer (mTLS gateway / RBAC)
 
 ## Lab journal
 
