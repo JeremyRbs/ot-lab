@@ -1,8 +1,4 @@
-# Session 4 — Modbus Reconnaissance and Simulated Unauthorized Write
-
-> Scope: this exercise used the author's isolated lab and a simulated tank.
-> It does not demonstrate control of a physical pump or any third-party
-> system.
+# Session 4: Modbus reconnaissance and simulated unauthorized write
 
 ## Objective
 
@@ -70,7 +66,7 @@ This is a fresh follow-up snapshot, not the original Session 4 terminal output:
 it reports setpoint 200, level 100, and coil 0 ON. Do not conflate it with the
 earlier Session 4 state above.
 
-## 2. Captured Modbus/TCP Traffic
+## 2. Captured Modbus/TCP traffic
 
 Capture: [`../captures/session4-attack.pcapng`](../captures/session4-attack.pcapng)
 
@@ -87,7 +83,7 @@ itself establish a server-side failure. The FC06 attack request has a matching
 response. The capture spans about 165 seconds. Times below are relative to the
 attack write in the capture, not wall-clock times.
 
-## 3. Setpoint Write and Simulated Process Effect
+## 3. Setpoint write and simulated process effect
 
 [`../scripts/attack_overflow.py`](../scripts/attack_overflow.py) writes 200 to
 holding register 1024, which maps to the setpoint. The relevant captured FC06
@@ -126,7 +122,7 @@ clamps `level` at 100, but with a setpoint of 200 the stop threshold is 210.
 The level can never reach that threshold, so the PLC keeps `pump_output` on
 while the simulated value remains capped at 100.
 
-## 4. What the Capture Does and Does Not Prove
+## 4. What the capture does and does not prove
 
 - The server accepted the captured FC06 write and echoed it; later FC03
   responses show setpoint 200.
@@ -144,7 +140,7 @@ while the simulated value remains capped at 100.
   restore a safe test state in the isolated lab and confirm the pump output is
   off before ending the session.
 
-## 5. Code and Repository Notes
+## 5. Code and repository notes
 
 - Both session 4 scripts now use English output and comments. The JSON
   configuration is read with Python's standard library; Flask is not needed.
@@ -169,14 +165,14 @@ while the simulated value remains capped at 100.
 - The later Session 5 setpoint restoration write and its verification are
   documented in [`session-05.md`](./session-05.md).
 
-## Session Deliverables
+## Session deliverables
 
 - [x] `scripts/attack_recon.py` read the configured lab PLC's mapped points
       (terminal output supplied; not present in the PCAPNG)
 - [x] Nmap identified Modbus/TCP on port 502 and HTTPS on port 8443
 - [x] `scripts/attack_overflow.py` contains the controlled setpoint-write test
 - [x] `captures/session4-attack.pcapng` contains the FC06 write and subsequent
-  process reads
+      process reads
 - [x] FC06 request decoded byte by byte
 - [x] Simulated impact documented without claiming a physical overflow
 - [x] Save the Nmap output in `captures/session4-nmap.txt`

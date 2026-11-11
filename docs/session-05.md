@@ -1,4 +1,4 @@
-# Session 5 — Firewall Filtering and Modbus Connection Monitoring
+# Session 5: Firewall filtering and modbus connection monitoring
 
 ## Objective
 
@@ -7,7 +7,7 @@ established Modbus clients, and verify firewall logging and blocking. Testing
 used the isolated lab only. The Raspberry Pi was `192.168.1.120`; the sole PC
 client was `192.168.1.50`.
 
-## 1. Baseline Firewall Rules
+## 1. Baseline firewall rules
 
 The reported `iptables` INPUT chain has the following order:
 
@@ -27,7 +27,7 @@ operator later supplied a post-reboot `iptables -L -n` listing with the same
 five INPUT rules in the same order, confirming IPv4 rule persistence on this
 Pi.
 
-## 2. Established-Connection Monitor
+## 2. Established-connection monitor
 
 [`../scripts/detect_modbus.py`](../scripts/detect_modbus.py) polls `ss` once per
 second for established sockets whose local/source port is 502. It compares
@@ -46,7 +46,7 @@ an allowed address is not classified as unexpected. Firewall logs complement
 the monitor by recording packets dropped before a TCP connection is
 established.
 
-## 3. Controlled Firewall Test
+## 3. Controlled firewall test
 
 There was only one PC, and it was normally allowlisted. To test the deny/log
 path without another client, temporary rules were inserted before the baseline
@@ -83,7 +83,7 @@ The two logged SYN packets are connection attempts from the PC to the Modbus
 port. The operator reported removing the temporary rules afterward and
 restoring the baseline access.
 
-## 4. PCAPNG Evidence and Interpretation
+## 4. PCAPNG evidence and interpretation
 
 Capture: [`../captures/session5-defense.pcapng`](../captures/session5-defense.pcapng)
 
@@ -129,7 +129,7 @@ later returned setpoint 50, level 100, and pump OFF. No level-register write
 was made. This stops the simulated pump but does not reduce the simulated
 level.
 
-## 5. Session 4 vs. Session 5
+## 5. Session 4 vs. session 5
 
 | Test | Session 4: no temporary deny rule | Session 5: temporary deny rule for `.50` |
 |---|---|---|
@@ -144,7 +144,7 @@ test from a second, independently addressed untrusted device. The result should
 not be generalized to clients on other networks or interfaces without testing
 those paths.
 
-## Limitations and Follow-up
+## Limitations and follow-up
 
 - The firewall rule listing is operator-supplied and saved as a transcription;
   it was not queried directly by this repository review. The operator supplied
@@ -193,7 +193,7 @@ those paths.
 - The read-only `hmi.py` display then repeatedly showed level 100, setpoint 50,
   and pump OFF.
 
-## Session Deliverables
+## Session deliverables
 
 - [x] Baseline INPUT rules recorded in `captures/session5-rules.txt`
 - [x] `scripts/detect_modbus.py` monitors established Modbus client sessions

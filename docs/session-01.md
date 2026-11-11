@@ -1,26 +1,24 @@
-# Session 1 — Installing the OpenPLC v4 Runtime on Raspberry Pi
-
-> File: `docs/session-01.md` — commit at the root of the `ot-lab` repository.
+# Session 1: Installing the OpenPLC v4 Runtime on Raspberry Pi
 
 ## Objective
 
 Install the OpenPLC v4 runtime natively on the Raspberry Pi (no Docker), without disturbing the existing Rheomix project running on the same machine, and validate management interface access from the PC.
 
-## Hardware and Environment
+## Hardware and environment
 
 | Item | Value |
 |---|---|
 | Target | Raspberry Pi (ARM64, `aarch64`) |
 | OS | Debian 13.7 "Trixie" (Raspberry Pi OS) |
-| RAM | 3.7 GiB total — 2.4 GiB available at test time |
-| Disk | 58 GB total — 48 GB free |
+| RAM | 3.7 GiB total (2.4 GiB available at test time) |
+| Disk | 58 GB total (48 GB free) |
 | Runtime | OpenPLC Runtime v4 (repo `Autonomy-Logic/openplc-runtime`, branch `development`) |
 | Installation | Native (`install.sh --native`), **without Docker** |
 | Client PC | Windows, OpenPLC Editor v4 (desktop application) |
 
-Decision: no Docker on the Pi — the machine already hosts Rheomix, and the available resources (RAM/disk) are sufficient for a native installation.
+Why no Docker: the Pi already hosts Rheomix, and I wanted to keep its RAM and disk for that project. A native install turned out to be enough for everything that followed.
 
-## Steps Performed
+## Steps performed
 
 ### 1. Pre-installation checks (read-only)
 
@@ -43,7 +41,7 @@ git checkout development
 ls -l install.sh start_openplc.sh   # verify both files exist
 ```
 
-Note: the legacy OpenPLC v3 (`thiagoralves/OpenPLC_v3`) is archived/abandoned. v4 is driven by the OpenPLC Editor v4 desktop application; the management port is **8443** (HTTPS), not the historical v3 port 8080.
+Note: the legacy OpenPLC v3 (`thiagoralves/OpenPLC_v3`) is archived/abandoned. v4 is driven by the OpenPLC Editor v4 desktop application; the management port is **8443** (HTTPS), not the historical v3 port 8080. I initially expected 8080 and lost a few minutes on that.
 
 ### 3. Native installation
 
@@ -74,21 +72,21 @@ From the PC:
 Test-NetConnection <PI_IP> -Port 8443   # TcpTestSucceeded : True
 ```
 
-Then open `https://<PI_IP>:8443` in a browser — self-signed certificate, a normal warning in a lab setting (verify the IP before accepting).
+Then open `https://<PI_IP>:8443` in a browser. The certificate is self-signed, so the browser warning is expected in a lab setting (verify the IP before accepting).
 
-## Pitfalls Encountered and Resolutions
+## Pitfalls encountered and resolutions
 
 - **`PLC State: EMPTY` / `No libplc_*.so file found in ./build`** on first start: normal behavior as long as no program has been compiled and deployed from the editor. The `build/new_libplc.so` file is generated at deployment (see Session 2).
 - The v4 runtime has **no web programming interface**: everything is driven from OpenPLC Editor v4 on the PC.
 - Docker ruled out to preserve the Pi's resources and its cohabitation with Rheomix.
 
-## Session Deliverables
+## Session deliverables
 
 - [x] v4 runtime installed natively, service active
 - [x] Port 8443 listening and reachable from the PC
 - [x] OpenPLC Editor v4 installed on the PC and connected to the runtime
 - [x] Session log/commit in `ot-lab`
 
-## Next Step
+## Next step
 
 Session 2: first ST program, enabling the Modbus server (port 502), and reading registers from Python (`pymodbus`).

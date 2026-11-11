@@ -1,4 +1,4 @@
-# Session 3 — Autonomous Tank, Modbus Packet Analysis, and CLI HMI
+# Session 3: Autonomous tank, modbus packet analysis and CLI HMI
 
 ## Objective
 
@@ -6,7 +6,7 @@ Turn the register-level tank example from Session 2 into a running simulated
 process, observe Modbus/TCP traffic packet by packet, and display the process
 through a lightweight Python HMI.
 
-## 1. Autonomous Tank Simulation
+## 1. Autonomous tank simulation
 
 The PLC program in [`../scripts/main.st`](../scripts/main.st) was extended so
 the tank level changes inside the controller rather than being continuously
@@ -47,10 +47,10 @@ of 70 was used in a separate test, not the run represented by this capture.
 > The actual rate therefore depends on the deployed scan period. Session 2
 > records a 20 ms PLC base tick, which would correspond to about 50 level units
 > per second if that is the effective cycle period. The capture verifies that
-> the level rises, but does not establish the deployed scan period. The original
-> “5 units/s” comment was corrected because it did not match scan-based logic.
+> the level rises, but does not establish the deployed scan period. My original
+> "5 units/s" comment was corrected because it did not match scan-based logic.
 
-## 2. Wireshark Capture and Modbus/TCP Dissection
+## 2. Wireshark capture and modbus/TCP dissection
 
 Capture file: [`../captures/session3.pcapng`](../captures/session3.pcapng)
 
@@ -64,7 +64,7 @@ Modbus/TCP payloads confirmed:
 | 03 | Read Holding Registers | 24 | 24 |
 | 06 | Write Single Register | 2 | 2 |
 
-### FC03 — Read Holding Registers
+### FC03: Read holding registers
 
 The captured request for the setpoint is:
 
@@ -94,7 +94,7 @@ It has the same transaction ID, response length `00 05`, Unit ID `01`, and
 function `03`. The byte count is `02`, and the register value is `00 32` =
 50 decimal.
 
-### FC06 — Write Single Register
+### FC06: Write Single Register
 
 The captured setpoint write is:
 
@@ -117,7 +117,7 @@ the request and its matching echo. This write sets the setpoint to 50. The
 second FC06 pair writes `0` to address `0x0401` (1025), initializing the level
 to an empty tank for the run.
 
-### FC01 — Read Coils
+### FC01: Read Coils
 
 One captured coil read is:
 
@@ -154,7 +154,7 @@ python scripts/hmi.py
 
 Press `Ctrl+C` to stop it cleanly.
 
-## Verification and Limitations
+## Verification and limitations
 
 - The PCAPNG file was parsed and confirmed to contain FC01, FC03, and FC06
   request/response pairs with matching transaction IDs.
@@ -167,7 +167,7 @@ Press `Ctrl+C` to stop it cleanly.
   still cannot be independently verified from this repository alone.
 - The HMI poll interval (200 ms) is separate from the PLC scan interval.
 
-## Session Deliverables
+## Session deliverables
 
 - [x] Autonomous tank behavior observed in the Modbus capture
 - [x] `captures/session3.pcapng` with FC01, FC03, and FC06 traffic
