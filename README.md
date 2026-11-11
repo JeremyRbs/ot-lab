@@ -23,7 +23,7 @@ Goal: understand, attack and defend a realistic control system, 100% on my own h
 - [x] Integrate an Ignition SCADA layer and observe the attack from supervision
 - [x] Harden the PLC itself: setpoint clamped to a valid range on every scan
 - [x] Map the bench onto the Purdue model and IEC 62443 zones/conduits, with an honest SL self-assessment
-- [ ] Next: authentication/authorization at the protocol layer (mTLS gateway / RBAC), then write-up #2
+- [x] Authentication/authorization at the protocol layer (mTLS gateway / RBAC), then write-up #2
 
 ## Lab journal
 
